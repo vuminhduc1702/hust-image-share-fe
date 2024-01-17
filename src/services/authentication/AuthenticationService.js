@@ -2,10 +2,10 @@ const { default: api } = require("../config/ApiConfig");
 
 const AuthenticationService = {
   login(data) {
-    return api.post("/api/user/authenticate", data);
+    return api.post("/api/public/authenticate", data);
   },
   register(data) {
-    return api.post("/api/user/register", data);
+    return api.post("/api/public/register", data);
   },
 };
 

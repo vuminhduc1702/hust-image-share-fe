@@ -1,8 +1,25 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import UserAuthenticationButton from "../UserAuthenticationButton/UserAuthenticationButton";
+import { useForm } from "react-hook-form";
+import NavigationBarDropDown from "../NavigationBarDropDown/NavigationBarDropDown";
 
 const NavigationBar = () => {
+  const navigate = useNavigate();
+  const form = useForm();
+  const { register, control, handleSubmit, formState, reset } = form;
+  const { errors, isSubmitSuccessful } = formState;
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitSuccessful, reset]);
+
+  const onSubmit = (data) => {
+    navigate(`/search?keyword=${data.keyword}`);
+  };
+
   return (
     <div className="navbar bg-white flex items-center">
       <div className="flex-none flex items-center">
@@ -15,30 +32,23 @@ const NavigationBar = () => {
             />
           </Link>
         </div>
-
-        <div>
-          <details className="dropdown">
-            <summary className="m-1 btn rounded-full">Trang chủ</summary>
-            <ul className="p-2 shadow-lg menu dropdown-content z-10 bg-white rounded-box w-52">
-              <li className="hover:bg-gray-200 rounded-lg">
-                <Link to={"/"}>Trang chủ</Link>
-              </li>
-              <li className="hover:bg-gray-200 rounded-lg">
-                <Link to={"/create"}>Tạo</Link>
-              </li>
-            </ul>
-          </details>
-        </div>
+        <NavigationBarDropDown />
       </div>
 
-      <div className="flex-1 flex items-center gap-2">
-        <div className="flex-1 form-control">
+      <div
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex-1 flex items-center gap-2"
+      >
+        <form className="flex-1 form-control">
           <input
             type="text"
             placeholder="Tìm kiếm"
-            className="input w-full rounded-full bg-gray-200"
+            className="input w-full rounded-full bg-gray-200 border-none focus:outline-none"
+            {...register("keyword", {
+              required: { value: true },
+            })}
           />
-        </div>
+        </form>
 
         <UserAuthenticationButton />
       </div>

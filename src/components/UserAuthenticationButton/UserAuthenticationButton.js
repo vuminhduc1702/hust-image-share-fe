@@ -1,15 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useContext } from "react";
 import LogoutModal from "../LogoutModal/LogoutModal";
 import { AuthContext } from "../../contexts/AuthContext";
+import toast from "react-hot-toast";
 
 const UserAuthenticationButton = () => {
   const { isAuthed, setIsAuthed, role, email } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleLogout = (e) => {
     e.preventDefault();
     setIsAuthed(false);
     localStorage.removeItem("accessToken");
+    navigate("/");
+    toast.success("Logged out");
   };
 
   return (
@@ -22,11 +26,10 @@ const UserAuthenticationButton = () => {
               role="button"
               className="btn btn-ghost btn-circle avatar"
             >
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                />
+              <div className="w-10 h-10 rounded-full text-lg  bg-pink-400 text-white hover:bg-pink-500 uppercase">
+                <div className="w-full h-full flex items-center justify-center">
+                  {email[0] + email[1]}
+                </div>
               </div>
             </div>
             <ul
